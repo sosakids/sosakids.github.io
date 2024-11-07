@@ -127,15 +127,18 @@ header {
     font-family: 'Verdana', monospace;
 }
 
+/* Estilos para mantener el precio y la talla visibles */
 .price1, .price2, .sizes1, .sizes2 {
     display: block;
 }
 
+/* Inicialmente oculta la descripción */
 .description1, .description2 {
     display: none;
     transition: opacity 0.3s ease;
 }
 
+/* Muestra la descripción al pasar el mouse sobre el contenedor del producto */
 .product:hover .description1,
 .product:hover .description2 {
     display: block;
