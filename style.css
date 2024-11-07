@@ -1,4 +1,3 @@
-/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f4f9; /* Color pastel suave de fondo */
@@ -127,18 +126,18 @@ header {
     font-family: 'Verdana', monospace;
 }
 
-/* Estilos para mantener el precio y la talla visibles */
+/* El precio y la talla visibles */
 .price1, .price2, .sizes1, .sizes2 {
     display: block;
 }
 
-/* Inicialmente oculta la descripción */
+/* descripcion oculta*/
 .description1, .description2 {
     display: none;
     transition: opacity 0.3s ease;
 }
 
-/* Muestra la descripción al pasar el mouse sobre el contenedor del producto */
+/* Muestra la descripción*/
 .product:hover .description1,
 .product:hover .description2 {
     display: block;
