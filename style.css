@@ -126,3 +126,18 @@ header {
 .description1, .description2 , .sizes1 , .sizes2 { /* Letra de la descripción */
     font-family: 'Verdana', monospace;
 }
+
+.price1, .price2, .sizes1, .sizes2 {
+    display: block;
+}
+
+.description1, .description2 {
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.product:hover .description1,
+.product:hover .description2 {
+    display: block;
+    opacity: 1;
+}
