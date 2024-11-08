@@ -98,11 +98,20 @@ window.onload = function() {
     }
 
     // Configura los botones de compra para los usuarios
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.onclick = function() {
-            const productName = this.parentNode.querySelector('.description').textContent;
-            const price = parseInt(this.parentNode.querySelector('.price').textContent.replace('$', '').replace('.', ''));
-            addToCart(productName, price);
-        };
-    });
+document.querySelectorAll('.buy-btn').forEach(button => {
+    button.onclick = function() {
+        const productContainer = this.parentNode; // Encuentra el contenedor del producto
+
+        // Obtiene el nombre y el precio del producto si existen
+        const productName = productContainer.querySelector('.description')?.textContent || "Producto desconocido";
+        const priceText = productContainer.querySelector('.price')?.textContent || "$0";
+
+        // Convierte el precio a número, eliminando símbolos y puntos
+        const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
+
+        // Añade el producto al carrito
+        addToCart(productName, price);
+    };
+});
+
 };
