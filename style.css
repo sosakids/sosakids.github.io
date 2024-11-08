@@ -1,23 +1,23 @@
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f4f9;
+    background-color: #f8f4f9; /* Color pastel suave de fondo */
     margin: 0;
     padding: 0;
     color: #333;
 }
 
-/* Encabezado */
+/* Estilos del encabezado */
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 30px;
+    padding: 30px 30px;
     background-color: #f0e5ff;
 }
 
 .logo img {
-    height: 125px;
+    height: 125px; /* Ajusta la altura del logo */
     width: 125px;
 }
 
@@ -27,15 +27,20 @@ header {
 }
 
 .header-text h1 {
-    font-family: 'Impact', sans-serif;
-    font-size: 4em;
-    color: #6a5acd;
+    margin: 0;
+    font-size: 3em;
+    color: #6a5acd; /* Color pastel para el título */
 }
 
 .header-text h2 {
-    font-family: 'Verdana', sans-serif;
-    font-size: 1.3em;
-    color: #6a5acd;
+    margin: 0;
+    font-size: 1.5em;
+    color: #6a5acd; /* Color pastel para el subtítulo */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
 }
 
 .search-bar input[type="text"] {
@@ -46,7 +51,7 @@ header {
     outline: none;
 }
 
-/* Sección de productos */
+/* Estilos para la sección de productos */
 .products {
     display: flex;
     flex-wrap: wrap;
@@ -55,7 +60,7 @@ header {
 }
 
 .product {
-    background-color: #ffffff;
+    background-color: #ffffff; /* Fondo blanco para resaltar el producto */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 250px;
@@ -64,7 +69,7 @@ header {
     text-align: center;
 }
 
-.product img {
+.product img {  /* Tamaño de imagenes */
     width: 250px;
     height: 250px;
     border-radius: 10px;
@@ -74,27 +79,80 @@ header {
     margin-top: 10px;
 }
 
-.price, .sizes {
+.price1 { /* Detalle precio para niños */
     font-size: 1.2em;
+    font-weight: bold;
     color: #565b5e;
 }
 
-/* Descripción en hover */
+.description1 { /* Detalle descripción para niños */
+    font-size: 1.1em;
+    color: #23b2bd;
+}
+
+.sizes1{/* Detalle tallas para niños */
+    font-size: 1.1em;
+    color: #23b2bd;
+}
+
+.price2 { /* Detalle precio para niñas */
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #e63da0;
+}
+
+.description2 { /* Detalle descripción para niñas */
+    font-size: 1.1em;
+    color: #9436c0;
+}
+
+.sizes2{/* Detalle tallas para niñas */
+    font-size: 1.1em;
+    color: #9436c0;
+}
+
+.header-text h1 {
+    font-family: 'Impact', sans-serif; /* Letra del titulo */
+    font-size: 4em;
+    color: #6a5acd;
+}
+
+.header-text h2 { /* Letra del subtitulo */
+    font-family: 'Verdana', sans-serif; 
+    font-size: 1.30em;
+    color: #6a5acd;
+}
+
+.description1, .description2 , .sizes1 , .sizes2 { /* Letra de la descripción */
+    font-family: 'Verdana', monospace;
+}
+
+/* Estilos para mantener el precio y la talla visibles */
+.price1, .price2, .sizes1, .sizes2 {
+    display: block;
+}
+
+/* Inicialmente oculta la descripción */
 .description1, .description2 {
-    opacity: 0;
+    display: none;
     transition: opacity 0.3s ease;
 }
 
+/* Muestra la descripción al pasar el mouse sobre el contenedor del producto */
 .product:hover .description1,
 .product:hover .description2 {
+    display: block;
     opacity: 1;
 }
 
-/* Pie de página */
+
+/* Estilos generales para el pie de página */
+
 footer {
     background-color: #333;
     color: #fff;
     padding: 20px 0;
+    font-family: Arial, sans-serif;
 }
 
 .footer-container {
@@ -106,10 +164,16 @@ footer {
     padding: 20px;
 }
 
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+}
+
 .footer-section h4 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #6a5acd;
+    color: #6a5acd; /* Color lavanda */
 }
 
 .footer-section ul {
@@ -117,26 +181,98 @@ footer {
     padding: 0;
 }
 
-/* Iconos de pago y redes sociales */
-.payment-methods ul li img,
-.social-media ul li a {
-    width: 30px;
+.footer-section ul li {
+    margin: 5px 0;
+}
+
+.footer-section ul li a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+    color: #6a5acd; /* Color lavanda al pasar el cursor */
+}
+
+/* Estilos para la sección del logo */
+.logo-section img {
+    max-width: 100px;
     height: auto;
+    margin-bottom: 10px;
+}
+
+/* Estilos para la sección de redes sociales */
+.social-media ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.social-media ul li {
+    margin-right: 10px;
+}
+
+.social-media ul li a {
+    color: #ddd;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.social-media ul li a:hover {
+    color: #6a5acd; /* Cambia a lavanda al pasar el cursor */
+}
+
+/* Estilos para los métodos de pago */
+.payment-methods ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.payment-methods ul li {
+    margin-right: 10px;
 }
 
 .payment-methods ul li img {
+    max-width: 50px;
+    height: auto;
     border-radius: 5px;
 }
 
-/* Botón de inicio de sesión */
+/* Estilos para el texto de copyright */
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #bbb;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+.footer-section.payment-methods ul li:nth-child(1) img {
+    max-width: 400px;
+    height: 60px;
+}
+.footer-section.payment-methods ul li:nth-child(2) img {
+    max-width: 200px;
+    height: 60px;
+}
+
+
+/* Botón de inicio de sesión en el encabezado */
 .login-container {
     position: absolute;
     top: 20px;
-    right: 10px;
+    right: 30px;
 }
 
 .login-container button {
     padding: 8px 16px;
+    font-size: 14px;
     background-color: #6a5acd;
     color: #fff;
     border: none;
@@ -148,16 +284,78 @@ footer {
     background-color: #5a4abe;
 }
 
-/* Carrito de compras */
+/* Estilos para la página de Login y Registro */
+.login-register-container {
+    width: 300px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+.login-register-container h2 {
+    color: #6a5acd;
+}
+
+.login-register-container form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-register-container label {
+    text-align: left;
+    margin: 5px 0;
+}
+
+.login-register-container input {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-register-container button {
+    padding: 10px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-register-container button:hover {
+    background-color: #5a4abe;
+}
+
+/* Estilos para el botón de iniciar sesión */
+.styled-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #6a5acd; /* Color lavanda */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.styled-button:hover {
+    background-color: #5a4abe; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estilos para el carrito de compras */
 .cart-container {
     position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #f0e5ff;
-    padding: 15px;
+    padding: 10px;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-    display: none;
-    z-index: 1000;
+    display: none; /* Oculto por defecto */
+}
+
+.cart-container h3 {
+    margin: 0;
+    color: #6a5acd;
 }
 
 .cart-items {
@@ -181,6 +379,7 @@ footer {
     border-radius: 5px;
     padding: 8px 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .checkout-button:hover {
