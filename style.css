@@ -342,6 +342,7 @@ footer {
     background-color: #5a4abe; /* Color más oscuro al pasar el mouse */
 }
 
+/* Estilos para el carrito de compras */
 .cart-container {
     position: fixed;
     bottom: 0;
@@ -350,7 +351,7 @@ footer {
     padding: 10px;
     box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
     display: none; /* Oculto por defecto */
-    z-index: 1000;  /* Asegúrate de que esté encima de otros elementos */
+    z-index: 1000;
 }
 
 .cart-container h3 {
