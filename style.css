@@ -326,3 +326,19 @@ footer {
     background-color: #5a4abe;
 }
 
+/* Estilos para el botón de iniciar sesión */
+.styled-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #6a5acd; /* Color lavanda */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.styled-button:hover {
+    background-color: #5a4abe; /* Color más oscuro al pasar el mouse */
+}
+
