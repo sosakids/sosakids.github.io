@@ -1,6 +1,3 @@
-// script.js - Funcionalidad de la página
-console.log("Página cargada");
-
 // Datos simulados de usuarios
 const users = [
     { username: 'admin', password: 'adminpass', role: 'admin' },
@@ -8,10 +5,11 @@ const users = [
 ];
 
 let cart = [];
+let totalAmount = 0;
 
 // Redirige a la página de login
 function redirectToLogin() {
-    window.location.href = "login.html"; // Asegúrate de que "login.html" esté en el mismo directorio
+    window.location.href = "login.html";
 }
 
 // Maneja el inicio de sesión
@@ -42,10 +40,11 @@ function handleRegister(event) {
 }
 
 // Añade producto al carrito
-function addToCart(productName) {
+function addToCart(productName, price) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        cart.push(productName);
+        cart.push({ name: productName, price: price });
+        totalAmount += price;
         displayCart();
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
@@ -55,21 +54,19 @@ function addToCart(productName) {
     }
 }
 
-// Muestra el carrito con los productos añadidos
+// Muestra el carrito con los productos añadidos y el total
 function displayCart() {
     const cartContainer = document.getElementById("cartContainer");
     const cartItems = document.getElementById("cartItems");
+    const totalElement = document.getElementById("total");
 
-    // Muestra el carrito
     cartContainer.style.display = "block";
-
-    // Limpia la lista de elementos antes de renderizar
     cartItems.innerHTML = "";
+    totalElement.textContent = `Total: $${totalAmount}`;
 
-    // Agrega cada producto al carrito
-    cart.forEach((item, index) => {
+    cart.forEach(item => {
         const listItem = document.createElement("li");
-        listItem.textContent = item;
+        listItem.textContent = `${item.name} - $${item.price}`;
         cartItems.appendChild(listItem);
     });
 }
@@ -77,9 +74,10 @@ function displayCart() {
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
-        alert("¡Gracias por tu compra!");
-        cart = []; // Limpia el carrito después de la compra
-        displayCart(); // Actualiza la vista del carrito
+        alert("¡Gracias por su compra!");
+        cart = [];
+        totalAmount = 0;
+        displayCart();
     } else {
         alert("Tu carrito está vacío.");
     }
@@ -99,13 +97,12 @@ window.onload = function() {
         };
     }
 
-    // Agregar eventos de compra solo para usuarios
+    // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
             const productName = this.parentNode.querySelector('.description').textContent;
-            addToCart(productName);
+            const price = parseInt(this.parentNode.querySelector('.price').textContent.replace('$', '').replace('.', ''));
+            addToCart(productName, price);
         };
     });
 };
-
-
