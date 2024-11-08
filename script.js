@@ -1,4 +1,4 @@
-// script.js - De momento no requiere funcionalidad específica
+// script.js - Funcionalidad de la página
 console.log("Página cargada");
 
 // Datos simulados de usuarios
@@ -7,11 +7,12 @@ const users = [
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
+let cart = [];
+
 // Redirige a la página de login
 function redirectToLogin() {
     window.location.href = "login.html"; // Asegúrate de que "login.html" esté en el mismo directorio
 }
-
 
 // Maneja el inicio de sesión
 function handleLogin(event) {
@@ -40,6 +41,43 @@ function handleRegister(event) {
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
 
+// Añade producto al carrito
+function addToCart(productName) {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && loggedInUser.role !== 'admin') {
+        cart.push(productName);
+        displayCart();
+    } else {
+        alert("El carrito de compras solo está disponible para usuarios.");
+    }
+}
+
+// Muestra el carrito con los productos añadidos
+function displayCart() {
+    const cartContainer = document.getElementById("cartContainer");
+    const cartItems = document.getElementById("cartItems");
+
+    // Muestra el carrito
+    cartContainer.style.display = "block";
+
+    // Limpia la lista de elementos antes de renderizar
+    cartItems.innerHTML = "";
+
+    // Agrega cada producto al carrito
+    cart.forEach((item, index) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        cartItems.appendChild(listItem);
+    });
+}
+
+// Maneja el pedido
+function checkout() {
+    alert("¡Gracias por tu compra!");
+    cart = []; // Limpia el carrito después de la compra
+    displayCart(); // Actualiza la vista del carrito
+}
+
 // Verifica el estado de sesión y cambia el botón de "Iniciar sesión" a "Cerrar sesión"
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
@@ -53,5 +91,13 @@ window.onload = function() {
             location.reload();
         };
     }
+
+    // Agregar eventos de compra solo para usuarios
+    document.querySelectorAll('.buy-btn').forEach(button => {
+        button.onclick = function() {
+            const productName = this.parentNode.querySelector('.description').textContent;
+            addToCart(productName);
+        };
+    });
 };
 
