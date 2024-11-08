@@ -252,3 +252,12 @@ footer {
 .footer-bottom p {
     margin: 0;
 }
+
+.footer-section.payment-methods ul li:nth-child(1) img {
+    max-width: 400px;
+    height: 60px;
+}
+.footer-section.payment-methods ul li:nth-child(2) img {
+    max-width: 200px;
+    height: 60px;
+}
