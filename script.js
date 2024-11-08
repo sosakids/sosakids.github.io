@@ -41,11 +41,15 @@ function handleRegister(event) {
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
 
-// Añade producto al carrito
-function addToCart(productName) {
+let cart = [];
+let totalAmount = 0;
+
+// Función que añade un producto al carrito
+function addToCart(productName, price) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        cart.push(productName);
+        cart.push({ name: productName, price: price });
+        totalAmount += price;
         displayCart();
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
@@ -55,55 +59,31 @@ function addToCart(productName) {
     }
 }
 
-// Muestra el carrito con los productos añadidos
+// Muestra el carrito con los productos añadidos y el total
 function displayCart() {
     const cartContainer = document.getElementById("cartContainer");
-    const cartItems = document.getElementById("cartItems");
+    const cartItems = document.getElementById("cart");
+    const totalElement = document.getElementById("total");
 
-    // Muestra el carrito
     cartContainer.style.display = "block";
-
-    // Limpia la lista de elementos antes de renderizar
     cartItems.innerHTML = "";
+    totalElement.textContent = `Total: $${totalAmount}`;
 
-    // Agrega cada producto al carrito
-    cart.forEach((item, index) => {
+    cart.forEach(item => {
         const listItem = document.createElement("li");
-        listItem.textContent = item;
+        listItem.textContent = `${item.name} - $${item.price}`;
         cartItems.appendChild(listItem);
     });
 }
 
-// Maneja el pedido
-function checkout() {
+// Función para completar la compra
+function completePurchase() {
     if (cart.length > 0) {
         alert("¡Gracias por tu compra!");
-        cart = []; // Limpia el carrito después de la compra
-        displayCart(); // Actualiza la vista del carrito
+        cart = [];
+        totalAmount = 0;
+        displayCart();
     } else {
         alert("Tu carrito está vacío.");
     }
 }
-
-// Verifica el estado de sesión y cambia el botón de "Iniciar sesión" a "Cerrar sesión"
-window.onload = function() {
-    const loginBtn = document.getElementById("loginBtn");
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (loggedInUser) {
-        loginBtn.textContent = "Cerrar sesión";
-        loginBtn.onclick = function() {
-            localStorage.removeItem("loggedInUser");
-            alert("Sesión cerrada");
-            location.reload();
-        };
-    }
-
-    // Agregar eventos de compra solo para usuarios
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.onclick = function() {
-            const productName = this.parentNode.querySelector('.description').textContent;
-            addToCart(productName);
-        };
-    });
-};
