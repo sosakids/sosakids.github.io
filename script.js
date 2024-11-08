@@ -17,9 +17,7 @@ function handleLogin(event) {
     event.preventDefault();
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-
     const user = users.find(u => u.username === username && u.password === password);
-
     if (user) {
         alert(`Bienvenido ${user.role === 'admin' ? 'Administrador' : 'Usuario'}: ${user.username}`);
         localStorage.setItem("loggedInUser", JSON.stringify(user));
@@ -34,7 +32,6 @@ function handleRegister(event) {
     event.preventDefault();
     const newUsername = document.getElementById("newUsername").value;
     const newPassword = document.getElementById("newPassword").value;
-
     users.push({ username: newUsername, password: newPassword, role: 'user' });
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
@@ -97,27 +94,22 @@ window.onload = function() {
         };
     }
 
-// Configura los botones de compra para los usuarios
-window.onload = function() {
-    const loginBtn = document.getElementById("loginBtn");
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (loggedInUser) {
-        loginBtn.textContent = "Cerrar sesión";
-        loginBtn.onclick = function() {
-            localStorage.removeItem("loggedInUser");
-            alert("Sesión cerrada");
-            location.reload();
-        };
-    }
-
+    // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
-            const productContainer = this.parentNode;
-            const productName = productContainer.querySelector('.description1')?.textContent || productContainer.querySelector('.description2')?.textContent || "Producto desconocido";
-            const priceText = productContainer.querySelector('.price1')?.textContent || productContainer.querySelector('.price2')?.textContent || "$0";
+            const productContainer = this.parentNode; // Encuentra el contenedor del producto
+            // Obtiene el nombre y el precio del producto si existen
+            const productName = productContainer.querySelector('.description1')?.textContent ||
+                                productContainer.querySelector('.description2')?.textContent ||
+                                "Producto desconocido";
+            const priceText = productContainer.querySelector('.price1')?.textContent ||
+                              productContainer.querySelector('.price2')?.textContent ||
+                              "$0";
+            // Convierte el precio a número, eliminando símbolos y puntos
             const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
+            // Añade el producto al carrito
             addToCart(productName, price);
         };
     });
 };
+
