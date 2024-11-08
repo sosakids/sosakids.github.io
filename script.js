@@ -47,8 +47,11 @@ function addToCart(productName) {
     if (loggedInUser && loggedInUser.role !== 'admin') {
         cart.push(productName);
         displayCart();
-    } else {
+    } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
+    } else {
+        alert("Por favor, inicia sesión para comprar.");
+        redirectToLogin();
     }
 }
 
@@ -73,9 +76,13 @@ function displayCart() {
 
 // Maneja el pedido
 function checkout() {
-    alert("¡Gracias por tu compra!");
-    cart = []; // Limpia el carrito después de la compra
-    displayCart(); // Actualiza la vista del carrito
+    if (cart.length > 0) {
+        alert("¡Gracias por tu compra!");
+        cart = []; // Limpia el carrito después de la compra
+        displayCart(); // Actualiza la vista del carrito
+    } else {
+        alert("Tu carrito está vacío.");
+    }
 }
 
 // Verifica el estado de sesión y cambia el botón de "Iniciar sesión" a "Cerrar sesión"
@@ -100,4 +107,5 @@ window.onload = function() {
         };
     });
 };
+
 
