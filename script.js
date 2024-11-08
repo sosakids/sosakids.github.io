@@ -9,8 +9,9 @@ const users = [
 
 // Redirige a la página de login
 function redirectToLogin() {
-    window.location.href = "login.html";
+    window.location.href = "login.html"; // Asegúrate de que "login.html" esté en el mismo directorio
 }
+
 
 // Maneja el inicio de sesión
 function handleLogin(event) {
@@ -53,3 +54,4 @@ window.onload = function() {
         };
     }
 };
+
