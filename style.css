@@ -261,3 +261,68 @@ footer {
     max-width: 200px;
     height: 60px;
 }
+
+
+/* Botón de inicio de sesión en el encabezado */
+.login-container {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.login-container button {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #5a4abe;
+}
+
+/* Estilos para la página de Login y Registro */
+.login-register-container {
+    width: 300px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+.login-register-container h2 {
+    color: #6a5acd;
+}
+
+.login-register-container form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.login-register-container label {
+    text-align: left;
+    margin: 5px 0;
+}
+
+.login-register-container input {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-register-container button {
+    padding: 10px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-register-container button:hover {
+    background-color: #5a4abe;
+}
+
