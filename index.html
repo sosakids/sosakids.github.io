@@ -28,11 +28,13 @@
     </header>
 
         <!-- Carrito de compras -->
-   <div id="cartContainer" class="cart-container">
+<div id="cartContainer" class="cart-container">
     <h3>Carrito de Compras</h3>
-    <ul id="cartItems" class="cart-items"></ul>
-    <button id="checkoutBtn" onclick="checkout()" class="checkout-button">Realizar Pedido</button>
-   </div>
+    <ul id="cart" class="cart-items"></ul> <!-- Lista de productos en el carrito -->
+    <p id="total" style="font-weight: bold;">Total: $0</p> <!-- Total del carrito -->
+    <button id="buyButton" onclick="completePurchase()" class="checkout-button">Comprar</button> <!-- Botón de compra -->
+</div>
+
     
     <section class="products">
         <div class="product">
