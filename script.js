@@ -12,6 +12,11 @@ function redirectToLogin() {
     window.location.href = "login.html";
 }
 
+// Redirige a la página de perfil
+function redirectToProfile() {
+    window.location.href = "profile.html";
+}
+
 // Maneja el inicio de sesión
 function handleLogin(event) {
     event.preventDefault();
@@ -34,6 +39,27 @@ function handleRegister(event) {
     const newPassword = document.getElementById("newPassword").value;
     users.push({ username: newUsername, password: newPassword, role: 'user' });
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
+}
+
+// Cambia la contraseña del usuario en el perfil
+function changePassword(event) {
+    event.preventDefault();
+    const newPassword = document.getElementById("newPassword").value;
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (loggedInUser) {
+        const user = users.find(u => u.username === loggedInUser.username);
+        if (user) {
+            user.password = newPassword;
+            localStorage.setItem("loggedInUser", JSON.stringify(user));
+            alert("Contraseña actualizada con éxito.");
+        } else {
+            alert("Error al actualizar la contraseña.");
+        }
+    } else {
+        alert("Por favor, inicie sesión nuevamente.");
+        redirectToLogin();
+    }
 }
 
 // Añade producto al carrito
@@ -68,16 +94,6 @@ function displayCart() {
     });
 }
 
-// Función para mostrar y ocultar el carrito
-function toggleCart() {
-    const cartContainer = document.getElementById("cartContainer");
-    if (cartContainer.style.display === "block") {
-        cartContainer.style.display = "none";
-    } else {
-        cartContainer.style.display = "block";
-    }
-}
-
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
@@ -92,29 +108,27 @@ function checkout() {
 
 // Función para filtrar productos por palabras clave en la descripción
 function searchProducts(event) {
-    if (event.key === "Enter") { // Detecta la tecla Enter
+    if (event.key === "Enter") {
         event.preventDefault();
-        
         const searchTerm = document.getElementById("searchInput").value.toLowerCase();
         const products = document.querySelectorAll(".product");
 
         products.forEach(product => {
             const description1 = product.querySelector(".description1")?.textContent.toLowerCase() || "";
             const description2 = product.querySelector(".description2")?.textContent.toLowerCase() || "";
-
-            // Verifica si la descripción contiene el término de búsqueda
             if (description1.includes(searchTerm) || description2.includes(searchTerm)) {
-                product.style.display = "block"; // Muestra el producto si coincide
+                product.style.display = "block";
             } else {
-                product.style.display = "none"; // Oculta el producto si no coincide
+                product.style.display = "none";
             }
         });
     }
 }
 
-// Ejecuta esta función cuando la página esté cargada para configurar el filtro de búsqueda
+// Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
+    const profileContainer = document.getElementById("profileContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -124,6 +138,7 @@ window.onload = function() {
             alert("Sesión cerrada");
             location.reload();
         };
+        profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
     }
 
     // Configura los botones de compra para los usuarios
