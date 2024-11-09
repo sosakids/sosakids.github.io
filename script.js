@@ -87,11 +87,26 @@ function displayCart() {
     cartItems.innerHTML = "";
     totalElement.textContent = `Total: $${totalAmount}`;
 
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         const listItem = document.createElement("li");
         listItem.textContent = `${item.name} - $${item.price}`;
+
+        // Crear botón de eliminar
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Eliminar";
+        removeButton.classList.add("remove-button");
+        removeButton.onclick = () => removeFromCart(index); // Llama a la función para eliminar
+
+        listItem.appendChild(removeButton); // Añade el botón al elemento del producto
         cartItems.appendChild(listItem);
     });
+}
+
+// Elimina un producto del carrito según su índice
+function removeFromCart(index) {
+    totalAmount -= cart[index].price; // Resta el precio del producto eliminado del total
+    cart.splice(index, 1); // Elimina el producto del carrito
+    displayCart(); // Actualiza la vista del carrito
 }
 
 // Maneja el pedido
@@ -164,3 +179,4 @@ function completePurchase() {
     alert("Gracias por su compra");
     window.location.href = "index.html"; // Redirige a la página principal después del pago
 }
+
