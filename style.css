@@ -450,3 +450,26 @@ footer {
 .profile-container button:hover {
     background-color: #5a4abe;
 }
+
+/* Estilo del botón "Inicio" */
+.home-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.styled-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.styled-button:hover {
+    background-color: #5a4abe;
+}
+
