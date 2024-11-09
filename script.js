@@ -158,3 +158,9 @@ window.onload = function() {
 function goToHome() {
     window.location.href = "index.html";
 }
+
+// Muestra un mensaje de confirmación de compra
+function completePurchase() {
+    alert("Gracias por su compra");
+    window.location.href = "index.html"; // Redirige a la página principal después del pago
+}
