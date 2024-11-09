@@ -68,6 +68,16 @@ function displayCart() {
     });
 }
 
+// Función para mostrar y ocultar el carrito
+function toggleCart() {
+    const cartContainer = document.getElementById("cartContainer");
+    if (cartContainer.style.display === "block") {
+        cartContainer.style.display = "none";
+    } else {
+        cartContainer.style.display = "block";
+    }
+}
+
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
