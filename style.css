@@ -409,3 +409,44 @@ footer {
 .close-cart-button:hover {
     color: #6a5acd; /* Cambia el color al pasar el cursor */
 }
+
+
+.profile-container {
+    width: 300px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+.profile-container h2 {
+    color: #6a5acd;
+}
+
+.profile-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-container label {
+    text-align: left;
+    margin: 5px 0;
+}
+
+.profile-container input {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.profile-container button {
+    padding: 10px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-container button:hover {
+    background-color: #5a4abe;
+}
