@@ -157,7 +157,7 @@ window.onload = function() {
     });
 };
 
-// Redirige a la página principal
+// Dirige a la página principal
 function goToHome() {
     window.location.href = "index.html";
 }
