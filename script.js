@@ -4,20 +4,6 @@ const users = [
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
-// Lista de productos (chaquetas) con stock y precio inicial
-let products = [
-    { name: 'Chaqueta de Mario Bros', price: 69999, stock: 10 },
-    { name: 'Chaqueta de More Love', price: 69999, stock: 15 },
-    { name: 'Chaqueta de Capitán América', price: 69999, stock: 8 },
-    { name: 'Chaqueta de Pompón', price: 69999, stock: 12 },
-    { name: 'Chaqueta de Cars', price: 69999, stock: 10 },
-    { name: 'Chaqueta de Pompón (estilo 2)', price: 69999, stock: 9 },
-    { name: 'Beisbolera en cuerina', price: 69999, stock: 7 },
-    { name: 'Sudadera de Minnie', price: 69999, stock: 11 },
-    { name: 'Chaqueta de Top Gun', price: 69999, stock: 6 },
-    { name: 'Chaqueta estampada de corazones', price: 69999, stock: 14 }
-];
-
 let cart = [];
 let totalAmount = 0;
 
@@ -76,63 +62,13 @@ function changePassword(event) {
     }
 }
 
-// Muestra el stock y permite cambiar el precio si el usuario es administrador
-function displayStock() {
-    const productStockList = document.getElementById("productStockList");
-    productStockList.innerHTML = "";
-
-    products.forEach((product, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            ${product.name} - Stock: <span id="stock-${index}">${product.stock}</span> 
-            - Precio: $<input type="number" id="price-${index}" value="${product.price}">
-            <button onclick="updatePrice(${index})">Actualizar Precio</button>
-        `;
-        productStockList.appendChild(listItem);
-    });
-}
-
-// Función para actualizar el precio de un producto específico
-function updatePrice(index) {
-    const newPrice = document.getElementById(`price-${index}`).value;
-    products[index].price = parseInt(newPrice);
-    alert(`Precio de ${products[index].name} actualizado a $${newPrice}`);
-    displayProducts(); // Actualiza la visualización de productos en la página principal
-}
-
-// Redefine displayProducts para reflejar precios en tiempo real en la página principal
-function displayProducts() {
-    const productsContainer = document.querySelector(".products");
-    productsContainer.innerHTML = "";
-
-    products.forEach((product, index) => {
-        const productElement = document.createElement("div");
-        productElement.classList.add("product");
-        productElement.innerHTML = `
-            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
-            <div class="info">
-                <p class="price${index}">$${product.price}</p>
-                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
-                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
-            </div>
-        `;
-        productsContainer.appendChild(productElement);
-    });
-}
-
-// Añade producto al carrito y actualiza stock si el usuario no es admin
-function addToCart(index) {
+// Añade producto al carrito
+function addToCart(productName, price) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        if (products[index].stock > 0) {
-            cart.push({ name: products[index].name, price: products[index].price });
-            totalAmount += products[index].price;
-            products[index].stock -= 1; // Reduce el stock
-            displayCart();
-            displayProducts(); // Actualiza la visualización del stock en la página principal
-        } else {
-            alert("Este producto está agotado.");
-        }
+        cart.push({ name: productName, price: price });
+        totalAmount += price;
+        displayCart();
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
     } else {
@@ -205,7 +141,6 @@ function searchProducts(event) {
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
     const profileContainer = document.getElementById("profileContainer");
-    const stockContainer = document.getElementById("stockContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -216,15 +151,22 @@ window.onload = function() {
             location.reload();
         };
         profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
-
-        if (loggedInUser.role === 'admin') {
-            stockContainer.style.display = "block"; // Muestra la administración de stock si es admin
-            displayStock(); // Llama a la función para mostrar el stock y actualizar precios
-        }
     }
 
-    // Mostrar productos en la página principal
-    displayProducts();
+    // Configura los botones de compra para los usuarios
+    document.querySelectorAll('.buy-btn').forEach(button => {
+        button.onclick = function() {
+            const productContainer = this.parentNode;
+            const productName = productContainer.querySelector('.description1')?.textContent ||
+                                productContainer.querySelector('.description2')?.textContent ||
+                                "Producto desconocido";
+            const priceText = productContainer.querySelector('.price1')?.textContent ||
+                              productContainer.querySelector('.price2')?.textContent ||
+                              "$0";
+            const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
+            addToCart(productName, price);
+        };
+    });
 };
 
 // Dirige a la página principal
