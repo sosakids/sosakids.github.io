@@ -97,19 +97,15 @@ window.onload = function() {
     // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
-            const productContainer = this.parentNode; // Encuentra el contenedor del producto
-            // Obtiene el nombre y el precio del producto si existen
+            const productContainer = this.parentNode;
             const productName = productContainer.querySelector('.description1')?.textContent ||
                                 productContainer.querySelector('.description2')?.textContent ||
                                 "Producto desconocido";
             const priceText = productContainer.querySelector('.price1')?.textContent ||
                               productContainer.querySelector('.price2')?.textContent ||
                               "$0";
-            // Convierte el precio a número, eliminando símbolos y puntos
             const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
-            // Añade el producto al carrito
             addToCart(productName, price);
         };
     });
 };
-
