@@ -94,7 +94,7 @@ window.onload = function() {
         };
     }
 
-    // Función para filtrar productos por palabras clave en la descripción
+// Función para filtrar productos por palabras clave en la descripción
 function searchProducts(event) {
     if (event.key === "Enter") { // Detecta la tecla Enter
         event.preventDefault();
@@ -131,9 +131,6 @@ window.onload = function() {
         };
     }
 
-
-
-    
     // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
