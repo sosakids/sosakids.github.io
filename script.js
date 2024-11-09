@@ -12,7 +12,14 @@ let inventory = [
     { name: 'Chaqueta de More Love enguatada', stock: 10, price: 69999 },
     { name: 'Sudadera de Mario Bros', stock: 8, price: 59999 },
     { name: 'Chaqueta Top Gun', stock: 5, price: 79999 },
-    // Agrega más productos según sea necesario
+    { name: 'Chaqueta de Capitan America', stock: 7, price: 74999 },
+    { name: 'Chaqueta de pompon', stock: 6, price: 64999 },
+    { name: 'Chaqueta de Cars', stock: 9, price: 67999 },
+    { name: 'Chaqueta de Minnie', stock: 12, price: 65999 },
+    { name: 'Beisbolera en cuerina', stock: 4, price: 69999 },
+    { name: 'Sudadera de Minnie', stock: 10, price: 58999 },
+    { name: 'Chaqueta de Top Gun forrada en ovejero', stock: 5, price: 78999 },
+    { name: 'Chaqueta estampada de corazones', stock: 7, price: 71999 }
 ];
 
 // Redirige a la página de login
