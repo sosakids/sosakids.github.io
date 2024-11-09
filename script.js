@@ -80,20 +80,6 @@ function checkout() {
     }
 }
 
-// Verifica el estado de sesión y cambia el botón de "Iniciar sesión" a "Cerrar sesión"
-window.onload = function() {
-    const loginBtn = document.getElementById("loginBtn");
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (loggedInUser) {
-        loginBtn.textContent = "Cerrar sesión";
-        loginBtn.onclick = function() {
-            localStorage.removeItem("loggedInUser");
-            alert("Sesión cerrada");
-            location.reload();
-        };
-    }
-
 // Función para filtrar productos por palabras clave en la descripción
 function searchProducts(event) {
     if (event.key === "Enter") { // Detecta la tecla Enter
@@ -118,7 +104,6 @@ function searchProducts(event) {
 
 // Ejecuta esta función cuando la página esté cargada para configurar el filtro de búsqueda
 window.onload = function() {
-    // Código existente para la carga de la página y sesión
     const loginBtn = document.getElementById("loginBtn");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
