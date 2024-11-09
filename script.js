@@ -97,10 +97,7 @@ function displayCart() {
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
-        alert("¡Gracias por su compra!");
-        cart = [];
-        totalAmount = 0;
-        displayCart();
+        window.location.href = "payment.html"; // Redirige a la página de pago
     } else {
         alert("Tu carrito está vacío.");
     }
