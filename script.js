@@ -1,35 +1,23 @@
-
 // Datos simulados de usuarios
 const users = [
     { username: 'admin', password: 'adminpass', role: 'admin' },
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
-// Lista de productos (chaquetas) con stock inicial
-let products = [
-    { name: 'Chaqueta de Mario Bros', stock: 10 },
-    { name: 'Chaqueta de More Love', stock: 15 },
-    { name: 'Chaqueta de Capitán América', stock: 8 },
-    { name: 'Chaqueta de Pompón', stock: 12 },
-    { name: 'Chaqueta de Cars', stock: 10 },
-    { name: 'Chaqueta de Pompón (estilo 2)', stock: 9 },
-    { name: 'Beisbolera en cuerina', stock: 7 },
-    { name: 'Sudadera de Minnie', stock: 11 },
-    { name: 'Chaqueta de Top Gun', stock: 6 },
-    { name: 'Chaqueta estampada de corazones', stock: 14 }
-];
-
 let cart = [];
 let totalAmount = 0;
+
+// Inventario inicial de productos
+let inventory = [
+    { name: 'Chaqueta de More Love enguatada', stock: 10, price: 69999 },
+    { name: 'Sudadera de Mario Bros', stock: 8, price: 59999 },
+    { name: 'Chaqueta Top Gun', stock: 5, price: 79999 },
+    // Agrega más productos según sea necesario
+];
 
 // Redirige a la página de login
 function redirectToLogin() {
     window.location.href = "login.html";
-}
-
-// Redirige a la página de perfil
-function redirectToProfile() {
-    window.location.href = "profile.html";
 }
 
 // Maneja el inicio de sesión
@@ -47,60 +35,43 @@ function handleLogin(event) {
     }
 }
 
-// Muestra el stock y permite cambiarlo si el usuario es administrador
-function displayStock() {
-    const productStockList = document.getElementById("productStockList");
-    productStockList.innerHTML = "";
+// Función para mostrar el inventario solo al administrador
+function displayInventory() {
+    const inventoryContainer = document.getElementById("inventoryContainer");
+    inventoryContainer.style.display = "block";
+    const inventoryList = document.getElementById("inventoryList");
+    inventoryList.innerHTML = ""; // Limpia la lista antes de agregar productos
 
-    products.forEach((product, index) => {
+    // Crea un elemento para cada producto en el inventario
+    inventory.forEach((item, index) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-            ${product.name} - Stock: <input type="number" id="stock-${index}" value="${product.stock}">
-            <button onclick="updateStock(${index})">Actualizar Stock</button>
+            <span>${item.name} - Stock: </span>
+            <input type="number" value="${item.stock}" min="0" onchange="updateStock(${index}, this.value)" />
         `;
-        productStockList.appendChild(listItem);
+        inventoryList.appendChild(listItem);
     });
 }
 
-// Función para actualizar el stock de un producto específico
-function updateStock(index) {
-    const newStock = document.getElementById(`stock-${index}`).value;
-    products[index].stock = parseInt(newStock);
-
-    alert(`Stock de ${products[index].name} actualizado a ${newStock}`);
-    displayProducts(); // Actualiza la visualización de productos en la página principal
+// Actualiza manualmente el stock de un producto
+function updateStock(index, newStock) {
+    inventory[index].stock = parseInt(newStock);
 }
 
-// Muestra todos los productos en la página principal con el stock actualizado
-function displayProducts() {
-    const productsContainer = document.querySelector(".products");
-    productsContainer.innerHTML = "";
-
-    products.forEach((product, index) => {
-        const productElement = document.createElement("div");
-        productElement.classList.add("product");
-        productElement.innerHTML = `
-            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
-            <div class="info">
-                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
-                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
-            </div>
-        `;
-        productsContainer.appendChild(productElement);
-    });
-}
-
-// Añade producto al carrito y actualiza el stock si el usuario no es admin
-function addToCart(index) {
+// Añade producto al carrito solo si hay stock disponible
+function addToCart(productName, price) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        if (products[index].stock > 0) {
-            cart.push({ name: products[index].name });
-            products[index].stock -= 1; // Reduce el stock automáticamente
+        const product = inventory.find(item => item.name === productName);
+
+        if (product && product.stock > 0) {
+            cart.push({ name: productName, price: price });
+            totalAmount += price;
+            product.stock -= 1; // Reduce el stock en 1
             displayCart();
-            displayProducts(); // Actualiza la visualización del stock en la página principal
+            displayInventory(); // Actualiza la vista del inventario en tiempo real
         } else {
-            alert("Este producto está agotado.");
+            alert("Este producto no está disponible en stock.");
         }
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
@@ -110,25 +81,52 @@ function addToCart(index) {
     }
 }
 
-// Muestra el carrito con los productos añadidos
+// Muestra el carrito con los productos añadidos y el total
 function displayCart() {
     const cartContainer = document.getElementById("cartContainer");
     const cartItems = document.getElementById("cartItems");
+    const totalElement = document.getElementById("total");
 
     cartContainer.style.display = "block";
     cartItems.innerHTML = "";
+    totalElement.textContent = `Total: $${totalAmount}`;
 
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         const listItem = document.createElement("li");
-        listItem.textContent = `${item.name}`;
+        listItem.textContent = `${item.name} - $${item.price}`;
+
+        // Crear botón de eliminar
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Eliminar";
+        removeButton.classList.add("remove-button");
+        removeButton.onclick = () => removeFromCart(index); // Llama a la función para eliminar
+
+        listItem.appendChild(removeButton); // Añade el botón al elemento del producto
         cartItems.appendChild(listItem);
     });
+}
+
+// Elimina un producto del carrito según su índice
+function removeFromCart(index) {
+    const product = cart[index];
+    totalAmount -= product.price;
+    const inventoryItem = inventory.find(item => item.name === product.name);
+    if (inventoryItem) {
+        inventoryItem.stock += 1; // Devuelve el stock al inventario
+    }
+    cart.splice(index, 1); // Elimina el producto del carrito
+    displayCart();
+    displayInventory(); // Actualiza la vista del inventario en tiempo real
 }
 
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
-        window.location.href = "payment.html"; // Redirige a la página de pago
+        alert("¡Gracias por su compra!");
+        cart = [];
+        totalAmount = 0;
+        displayCart();
+        displayInventory(); // Actualiza el inventario después de la compra
     } else {
         alert("Tu carrito está vacío.");
     }
@@ -137,8 +135,6 @@ function checkout() {
 // Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
-    const profileContainer = document.getElementById("profileContainer");
-    const stockContainer = document.getElementById("stockContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -148,25 +144,25 @@ window.onload = function() {
             alert("Sesión cerrada");
             location.reload();
         };
-        profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
 
+        // Muestra el inventario si el usuario es administrador
         if (loggedInUser.role === 'admin') {
-            stockContainer.style.display = "block"; // Muestra la administración de stock si es admin
-            displayStock(); // Llama a la función para mostrar el stock
+            displayInventory();
         }
     }
 
-    // Mostrar productos en la página principal
-    displayProducts();
+    // Configura los botones de compra para los usuarios
+    document.querySelectorAll('.buy-btn').forEach(button => {
+        button.onclick = function() {
+            const productContainer = this.parentNode;
+            const productName = productContainer.querySelector('.description1')?.textContent ||
+                                productContainer.querySelector('.description2')?.textContent ||
+                                "Producto desconocido";
+            const priceText = productContainer.querySelector('.price1')?.textContent ||
+                              productContainer.querySelector('.price2')?.textContent ||
+                              "$0";
+            const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
+            addToCart(productName, price);
+        };
+    });
 };
-
-// Dirige a la página principal
-function goToHome() {
-    window.location.href = "index.html";
-}
-
-// Muestra un mensaje de confirmación de compra
-function completePurchase() {
-    alert("Gracias por su compra");
-    window.location.href = "index.html"; // Redirige a la página principal después del pago
-}
