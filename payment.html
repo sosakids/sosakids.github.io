@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago | SOSAKIDS</title>
+    <link rel="stylesheet" href="style.css">
+    <div class="home-button-container">
+        <button id="homeBtn" class="styled-button" onclick="goToHome()">Inicio</button>
+    </div>
+</head>
+<body>
+    <header>
+        <button id="homeBtn" class="styled-button" onclick="goToHome()">Inicio</button>
+    </header>
+    
+    <main class="payment-container">
+        <h2>Realiza tu pago</h2>
+        
+        <div class="qr-container">
+            <div class="qr-section">
+                <h3>Nequi</h3>
+                <img src="Imagenes/NequiQR.png" alt="QR Nequi" class="qr-image">
+            </div>
+            <div class="qr-section">
+                <h3>Daviplata</h3>
+                <img src="Imagenes/DaviplataQR.png" alt="QR Daviplata" class="qr-image">
+            </div>
+        </div>
+        
+        <button id="payBtn" class="styled-button" onclick="completePurchase()">Pagar</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
