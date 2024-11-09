@@ -526,3 +526,72 @@ footer {
 .remove-button:hover {
     background-color: #cc0000;
 }
+
+/* Estilos para el contenedor de inventario */
+#inventoryContainer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #6a5acd;
+    border-radius: 10px;
+    max-width: 500px;
+    display: none; /* Solo visible para el admin */
+}
+
+#inventoryContainer h3 {
+    font-size: 1.8em;
+    color: #6a5acd;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Lista de productos en el inventario */
+#inventoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#inventoryList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    color: #333;
+}
+
+/* Estilo para los campos de stock en el inventario */
+#inventoryList li span {
+    font-weight: bold;
+    color: #555;
+}
+
+#inventoryList li input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1em;
+}
+
+/* Scroll personalizado en el inventario */
+#inventoryList::-webkit-scrollbar {
+    width: 8px;
+}
+
+#inventoryList::-webkit-scrollbar-track {
+    background: #f0e5ff;
+    border-radius: 5px;
+}
+
+#inventoryList::-webkit-scrollbar-thumb {
+    background-color: #6a5acd;
+    border-radius: 5px;
+}
+
+
