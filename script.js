@@ -94,6 +94,46 @@ window.onload = function() {
         };
     }
 
+    // Función para filtrar productos por palabras clave en la descripción
+function searchProducts(event) {
+    if (event.key === "Enter") { // Detecta la tecla Enter
+        event.preventDefault();
+        
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        const products = document.querySelectorAll(".product");
+
+        products.forEach(product => {
+            const description1 = product.querySelector(".description1")?.textContent.toLowerCase() || "";
+            const description2 = product.querySelector(".description2")?.textContent.toLowerCase() || "";
+
+            // Verifica si la descripción contiene el término de búsqueda
+            if (description1.includes(searchTerm) || description2.includes(searchTerm)) {
+                product.style.display = "block"; // Muestra el producto si coincide
+            } else {
+                product.style.display = "none"; // Oculta el producto si no coincide
+            }
+        });
+    }
+}
+
+// Ejecuta esta función cuando la página esté cargada para configurar el filtro de búsqueda
+window.onload = function() {
+    // Código existente para la carga de la página y sesión
+    const loginBtn = document.getElementById("loginBtn");
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (loggedInUser) {
+        loginBtn.textContent = "Cerrar sesión";
+        loginBtn.onclick = function() {
+            localStorage.removeItem("loggedInUser");
+            alert("Sesión cerrada");
+            location.reload();
+        };
+    }
+
+
+
+    
     // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
