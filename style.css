@@ -511,3 +511,18 @@ footer {
 #payBtn:hover {
     background-color: #5a4abe;
 }
+
+.remove-button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.remove-button:hover {
+    background-color: #cc0000;
+}
