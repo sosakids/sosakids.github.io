@@ -28,11 +28,13 @@
     </header>
 
     <div id="cartContainer" class="cart-container">
-    <h3>Carrito de Compras</h3>
-       <ul id="cartItems" class="cart-items"></ul>
-       <p id="total">Total: $0</p>
-       <button id="checkoutBtn" onclick="checkout()" class="checkout-button">Realizar Pedido</button>
+        <button id="closeCartBtn" class="close-cart-button" onclick="toggleCart()">X</button>
+        <h3>Carrito de Compras</h3>
+        <ul id="cartItems" class="cart-items"></ul>
+        <p id="total">Total: $0</p>
+        <button id="checkoutBtn" onclick="checkout()" class="checkout-button">Realizar Pedido</button>
     </div>
+
 
     
     <section class="products">
