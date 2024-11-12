@@ -169,9 +169,8 @@ function searchProducts(event) {
         const products = document.querySelectorAll(".product");
 
         products.forEach(product => {
-            const description1 = product.querySelector(".description1")?.textContent.toLowerCase() || "";
-            const description2 = product.querySelector(".description2")?.textContent.toLowerCase() || "";
-            if (description1.includes(searchTerm) || description2.includes(searchTerm)) {
+            const description = product.querySelector(".info .description0")?.textContent.toLowerCase() || "";
+            if (description.includes(searchTerm)) {
                 product.style.display = "block";
             } else {
                 product.style.display = "none";
@@ -179,6 +178,7 @@ function searchProducts(event) {
         });
     }
 }
+
 
 // Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
