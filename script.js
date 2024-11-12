@@ -55,31 +55,46 @@ function handleRegister(event) {
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
 
-// Muestra el stock y permite cambiarlo si el usuario es administrador
+// Muestra el stock si el usuario es administrador
 function displayStock() {
     const productStockList = document.getElementById("productStockList");
     productStockList.innerHTML = "";
 
-    products.forEach((product, index) => {
+    products.forEach((product) => {
         const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            ${product.name} - Stock: <input type="number" id="stock-${index}" value="${product.stock}">
-            <button onclick="updateStock(${index})">Actualizar Stock</button>
-        `;
+        listItem.textContent = `${product.name} - Stock: ${product.stock}`;
         productStockList.appendChild(listItem);
     });
 }
 
-// Añade producto al carrito y actualiza stock si el usuario no es admin
+// Muestra todos los productos en la página principal con el stock y precio
+function displayProducts() {
+    const productsContainer = document.querySelector(".products");
+    productsContainer.innerHTML = "";
+
+    products.forEach((product, index) => {
+        const productElement = document.createElement("div");
+        productElement.classList.add("product");
+        productElement.innerHTML = `
+            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
+            <div class="info">
+                <p class="price${index}">$${product.price}</p>
+                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
+                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
+            </div>
+        `;
+        productsContainer.appendChild(productElement);
+    });
+}
+
+// Añade producto al carrito si el usuario no es admin
 function addToCart(index) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
         if (products[index].stock > 0) {
             cart.push({ name: products[index].name, price: products[index].price });
             totalAmount += products[index].price;
-            products[index].stock -= 1; // Reduce el stock automáticamente
             displayCart();
-            displayProducts(); // Actualiza la visualización del stock en la página principal
         } else {
             alert("Este producto está agotado.");
         }
@@ -150,7 +165,6 @@ function searchProducts(event) {
     }
 }
 
-
 // Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
@@ -169,7 +183,7 @@ window.onload = function() {
 
         if (loggedInUser.role === 'admin') {
             stockContainer.style.display = "block"; // Muestra la administración de stock si es admin
-            displayStock(); // Llama a la función para mostrar el stock y actualizar precios
+            displayStock(); // Muestra el stock pero sin opción de modificarlo
         }
     }
 
