@@ -4,27 +4,31 @@ const users = [
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
+// Lista de productos (chaquetas) con precio y stock inicial
+let products = [
+    { name: 'Chaqueta de Mario Bros', price: 69999, stock: 10 },
+    { name: 'Chaqueta de More Love', price: 69999, stock: 15 },
+    { name: 'Chaqueta de Capitán América', price: 69999, stock: 8 },
+    { name: 'Chaqueta de Pompón', price: 69999, stock: 12 },
+    { name: 'Chaqueta de Cars', price: 69999, stock: 10 },
+    { name: 'Chaqueta de Pompón (estilo 2)', price: 69999, stock: 9 },
+    { name: 'Beisbolera en cuerina', price: 69999, stock: 7 },
+    { name: 'Sudadera de Minnie', price: 69999, stock: 11 },
+    { name: 'Chaqueta de Top Gun', price: 69999, stock: 6 },
+    { name: 'Chaqueta estampada de corazones', price: 69999, stock: 14 }
+];
+
 let cart = [];
 let totalAmount = 0;
-
-// Inventario inicial de productos
-let inventory = [
-    { name: 'Chaqueta de More Love enguatada', stock: 10, price: 69999 },
-    { name: 'Sudadera de Mario Bros', stock: 8, price: 59999 },
-    { name: 'Chaqueta Top Gun', stock: 5, price: 79999 },
-    { name: 'Chaqueta de Capitan America', stock: 7, price: 74999 },
-    { name: 'Chaqueta de pompon', stock: 6, price: 64999 },
-    { name: 'Chaqueta de Cars', stock: 9, price: 67999 },
-    { name: 'Chaqueta de Minnie', stock: 12, price: 65999 },
-    { name: 'Beisbolera en cuerina', stock: 4, price: 69999 },
-    { name: 'Sudadera de Minnie', stock: 10, price: 58999 },
-    { name: 'Chaqueta de Top Gun forrada en ovejero', stock: 5, price: 78999 },
-    { name: 'Chaqueta estampada de corazones', stock: 7, price: 71999 }
-];
 
 // Redirige a la página de login
 function redirectToLogin() {
     window.location.href = "login.html";
+}
+
+// Redirige a la página de perfil
+function redirectToProfile() {
+    window.location.href = "profile.html";
 }
 
 // Maneja el inicio de sesión
@@ -42,43 +46,71 @@ function handleLogin(event) {
     }
 }
 
-// Función para mostrar el inventario solo al administrador
-function displayInventory() {
-    const inventoryContainer = document.getElementById("inventoryContainer");
-    inventoryContainer.style.display = "block";
-    const inventoryList = document.getElementById("inventoryList");
-    inventoryList.innerHTML = ""; // Limpia la lista antes de agregar productos
+// Maneja el registro
+function handleRegister(event) {
+    event.preventDefault();
+    const newUsername = document.getElementById("newUsername").value;
+    const newPassword = document.getElementById("newPassword").value;
+    users.push({ username: newUsername, password: newPassword, role: 'user' });
+    alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
+}
 
-    // Crea un elemento para cada producto en el inventario
-    inventory.forEach((item, index) => {
+// Muestra el stock y permite cambiarlo si el usuario es administrador
+function displayStock() {
+    const productStockList = document.getElementById("productStockList");
+    productStockList.innerHTML = "";
+
+    products.forEach((product, index) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-            <span>${item.name} - Stock: </span>
-            <input type="number" value="${item.stock}" min="0" onchange="updateStock(${index}, this.value)" />
+            ${product.name} - Stock: <input type="number" id="stock-${index}" value="${product.stock}">
+            <button onclick="updateStock(${index})">Actualizar Stock</button>
         `;
-        inventoryList.appendChild(listItem);
+        productStockList.appendChild(listItem);
     });
 }
 
-// Actualiza manualmente el stock de un producto
-function updateStock(index, newStock) {
-    inventory[index].stock = parseInt(newStock);
+// Función para actualizar el stock de un producto específico
+function updateStock(index) {
+    const newStock = document.getElementById(`stock-${index}`).value;
+    products[index].stock = parseInt(newStock);
+
+    alert(`Stock de ${products[index].name} actualizado a ${newStock}`);
+    displayProducts(); // Actualiza la visualización de productos en la página principal
 }
 
-// Añade producto al carrito solo si hay stock disponible
-function addToCart(productName, price) {
+// Muestra todos los productos en la página principal con el stock y precio
+function displayProducts() {
+    const productsContainer = document.querySelector(".products");
+    productsContainer.innerHTML = "";
+
+    products.forEach((product, index) => {
+        const productElement = document.createElement("div");
+        productElement.classList.add("product");
+        productElement.innerHTML = `
+            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
+            <div class="info">
+                <p class="price${index}">$${product.price}</p>
+                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
+                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
+            </div>
+        `;
+        productsContainer.appendChild(productElement);
+    });
+}
+
+// Añade producto al carrito y actualiza stock si el usuario no es admin
+function addToCart(index) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        const product = inventory.find(item => item.name === productName);
-
-        if (product && product.stock > 0) {
-            cart.push({ name: productName, price: price });
-            totalAmount += price;
-            product.stock -= 1; // Reduce el stock en 1
+        if (products[index].stock > 0) {
+            cart.push({ name: products[index].name, price: products[index].price });
+            totalAmount += products[index].price;
+            products[index].stock -= 1; // Reduce el stock automáticamente
             displayCart();
-            displayInventory(); // Actualiza la vista del inventario en tiempo real
+            displayProducts(); // Actualiza la visualización del stock en la página principal
         } else {
-            alert("Este producto no está disponible en stock.");
+            alert("Este producto está agotado.");
         }
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
@@ -115,33 +147,44 @@ function displayCart() {
 
 // Elimina un producto del carrito según su índice
 function removeFromCart(index) {
-    const product = cart[index];
-    totalAmount -= product.price;
-    const inventoryItem = inventory.find(item => item.name === product.name);
-    if (inventoryItem) {
-        inventoryItem.stock += 1; // Devuelve el stock al inventario
-    }
+    totalAmount -= cart[index].price; // Resta el precio del producto eliminado del total
     cart.splice(index, 1); // Elimina el producto del carrito
-    displayCart();
-    displayInventory(); // Actualiza la vista del inventario en tiempo real
+    displayCart(); // Actualiza la vista del carrito
 }
 
 // Maneja el pedido
 function checkout() {
     if (cart.length > 0) {
-        alert("¡Gracias por su compra!");
-        cart = [];
-        totalAmount = 0;
-        displayCart();
-        displayInventory(); // Actualiza el inventario después de la compra
+        window.location.href = "payment.html"; // Redirige a la página de pago
     } else {
         alert("Tu carrito está vacío.");
+    }
+}
+
+// Función para filtrar productos por palabras clave en la descripción
+function searchProducts(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        const products = document.querySelectorAll(".product");
+
+        products.forEach(product => {
+            const description1 = product.querySelector(".description1")?.textContent.toLowerCase() || "";
+            const description2 = product.querySelector(".description2")?.textContent.toLowerCase() || "";
+            if (description1.includes(searchTerm) || description2.includes(searchTerm)) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        });
     }
 }
 
 // Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
+    const profileContainer = document.getElementById("profileContainer");
+    const stockContainer = document.getElementById("stockContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -151,25 +194,25 @@ window.onload = function() {
             alert("Sesión cerrada");
             location.reload();
         };
+        profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
 
-        // Muestra el inventario si el usuario es administrador
         if (loggedInUser.role === 'admin') {
-            displayInventory();
+            stockContainer.style.display = "block"; // Muestra la administración de stock si es admin
+            displayStock(); // Llama a la función para mostrar el stock y actualizar precios
         }
     }
 
-    // Configura los botones de compra para los usuarios
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.onclick = function() {
-            const productContainer = this.parentNode;
-            const productName = productContainer.querySelector('.description1')?.textContent ||
-                                productContainer.querySelector('.description2')?.textContent ||
-                                "Producto desconocido";
-            const priceText = productContainer.querySelector('.price1')?.textContent ||
-                              productContainer.querySelector('.price2')?.textContent ||
-                              "$0";
-            const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
-            addToCart(productName, price);
-        };
-    });
+    // Mostrar productos en la página principal
+    displayProducts();
 };
+
+// Dirige a la página principal
+function goToHome() {
+    window.location.href = "index.html";
+}
+
+// Muestra un mensaje de confirmación de compra
+function completePurchase() {
+    alert("Gracias por su compra");
+    window.location.href = "index.html"; // Redirige a la página principal después del pago
+}
