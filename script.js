@@ -70,35 +70,6 @@ function displayStock() {
     });
 }
 
-// Función para actualizar el stock de un producto específico
-function updateStock(index) {
-    const newStock = document.getElementById(`stock-${index}`).value;
-    products[index].stock = parseInt(newStock);
-
-    alert(`Stock de ${products[index].name} actualizado a ${newStock}`);
-    displayProducts(); // Actualiza la visualización de productos en la página principal
-}
-
-// Muestra todos los productos en la página principal con el stock y precio
-function displayProducts() {
-    const productsContainer = document.querySelector(".products");
-    productsContainer.innerHTML = "";
-
-    products.forEach((product, index) => {
-        const productElement = document.createElement("div");
-        productElement.classList.add("product");
-        productElement.innerHTML = `
-            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
-            <div class="info">
-                <p class="price${index}">$${product.price}</p>
-                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
-                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
-            </div>
-        `;
-        productsContainer.appendChild(productElement);
-    });
-}
-
 // Añade producto al carrito y actualiza stock si el usuario no es admin
 function addToCart(index) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
