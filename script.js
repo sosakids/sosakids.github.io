@@ -55,18 +55,6 @@ function handleRegister(event) {
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
 
-// Muestra el stock si el usuario es administrador
-function displayStock() {
-    const productStockList = document.getElementById("productStockList");
-    productStockList.innerHTML = "";
-
-    products.forEach((product) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${product.name} - Stock: ${product.stock}`;
-        productStockList.appendChild(listItem);
-    });
-}
-
 
 // Añade producto al carrito si el usuario no es admin
 function addToCart(index) {
