@@ -102,6 +102,16 @@ function displayCart() {
     });
 }
 
+// Función para mostrar y ocultar el carrito
+function toggleCart() {
+    const cartContainer = document.getElementById("cartContainer");
+    if (cartContainer.style.display === "block") {
+        cartContainer.style.display = "none";
+    } else {
+        cartContainer.style.display = "block";
+    }
+}
+
 // Elimina un producto del carrito según su índice
 function removeFromCart(index) {
     totalAmount -= cart[index].price; // Resta el precio del producto eliminado del total
