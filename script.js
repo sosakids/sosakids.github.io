@@ -167,8 +167,19 @@ window.onload = function() {
             location.reload();
         };
         profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
+
+        if (loggedInUser.role === 'admin') {
+            stockBtnContainer.style.display = "block"; // Muestra el botón "Stock" solo si es admin
+        }
     }
 
+    displayProducts();
+};
+
+function redirectToStock() {
+    window.location.href = "stock.html";
+}
+    
     // Configura los botones de compra para los usuarios
     document.querySelectorAll('.buy-btn').forEach(button => {
         button.onclick = function() {
