@@ -195,3 +195,65 @@ function completePurchase() {
     alert("Gracias por su compra");
     window.location.href = "index.html"; // Redirige a la página principal después del pago
 }
+
+// STOCK
+
+// Datos de productos con imágenes y stock
+const productsData = [
+    { name: "Sudadera de Mario Bros", image: "C:\\SOSAKIDS2\\Imagenes\\Sudadera1.png", stock: 10 },
+    { name: "Chaqueta de More Love", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta1.png", stock: 5 },
+    { name: "Chaqueta de Capitán América", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta2.png", stock: 7 },
+    { name: "Chaqueta de pompon", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta5.png", stock: 6 },
+    { name: "Chaqueta de Cars", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta3.png", stock: 3 },
+    { name: "Beisbolera en cuerina", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta6.png", stock: 8 },
+    { name: "Sudadera de Minnie", image: "C:\\SOSAKIDS2\\Imagenes\\Sudadera2.png", stock: 9 },
+    { name: "Chaqueta de Top Gun", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta8.png", stock: 4 },
+    { name: "Chaqueta de corazones", image: "C:\\SOSAKIDS2\\Imagenes\\Chaqueta7.png", stock: 2 }
+];
+
+// Mostrar botón de Stock solo para el administrador
+window.onload = function() {
+    const loginBtn = document.getElementById("loginBtn");
+    const stockBtn = document.getElementById("stockBtn");
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (loggedInUser) {
+        loginBtn.textContent = "Cerrar sesión";
+        loginBtn.onclick = function() {
+            localStorage.removeItem("loggedInUser");
+            alert("Sesión cerrada");
+            location.reload();
+        };
+        
+        // Mostrar botón de stock si es administrador
+        if (loggedInUser.role === 'admin') {
+            stockBtn.style.display = "block";
+        }
+    }
+
+    // Mostrar stock en stock.html
+    if (window.location.pathname.includes("stock.html")) {
+        displayStockData();
+    }
+};
+
+// Función para mostrar el stock de productos en stock.html
+function displayStockData() {
+    const stockContainer = document.getElementById("stockContainer");
+    productsData.forEach(product => {
+        const productItem = document.createElement("div");
+        productItem.classList.add("stock-item");
+
+        const productImage = document.createElement("img");
+        productImage.src = product.image;
+        productImage.alt = product.name;
+
+        const productInfo = document.createElement("p");
+        productInfo.textContent = `${product.name} - Cantidad disponible: ${product.stock}`;
+
+        productItem.appendChild(productImage);
+        productItem.appendChild(productInfo);
+        stockContainer.appendChild(productItem);
+    });
+}
+
