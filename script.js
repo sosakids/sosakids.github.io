@@ -4,6 +4,20 @@ let users = JSON.parse(localStorage.getItem("users")) || [
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
+// Lista de productos (chaquetas) con precio y stock inicial
+let products = [
+    { name: 'Chaqueta de Mario Bros', price: 69999, stock: 10 },
+    { name: 'Chaqueta de More Love', price: 69999, stock: 15 },
+    { name: 'Chaqueta de Capitán América', price: 69999, stock: 8 },
+    { name: 'Chaqueta de Pompón', price: 69999, stock: 12 },
+    { name: 'Chaqueta de Cars', price: 69999, stock: 10 },
+    { name: 'Chaqueta de Pompón (estilo 2)', price: 69999, stock: 9 },
+    { name: 'Beisbolera en cuerina', price: 69999, stock: 7 },
+    { name: 'Sudadera de Minnie', price: 69999, stock: 11 },
+    { name: 'Chaqueta de Top Gun', price: 69999, stock: 6 },
+    { name: 'Chaqueta estampada de corazones', price: 69999, stock: 14 }
+];
+
 let cart = [];
 let totalAmount = 0;
 
@@ -37,44 +51,71 @@ function handleLogin(event) {
     }
 }
 
-// Maneja el registro y guarda el usuario en localStorage
-function handleRegister(event) {
-    event.preventDefault();
-    const newUsername = document.getElementById("newUsername").value;
-    const newPassword = document.getElementById("newPassword").value;
-    users.push({ username: newUsername, password: newPassword, role: 'user' });
-    saveUsers();
-    alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
+// Muestra el stock solo para el administrador
+function displayAdminStock() {
+    const inventoryContainer = document.getElementById("inventoryContainer");
+    inventoryContainer.innerHTML = ""; // Limpia el contenedor de inventario
+
+    products.forEach((product, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            ${product.name} - Stock: <input type="number" id="stock-${index}" value="${product.stock}" min="0">
+            <button onclick="updateStock(${index}, 'increase')">+</button>
+            <button onclick="updateStock(${index}, 'decrease')">-</button>
+        `;
+        inventoryContainer.appendChild(listItem);
+    });
 }
 
-// Cambia la contraseña del usuario en el perfil
-function changePassword(event) {
-    event.preventDefault();
-    const newPassword = document.getElementById("newPassword").value;
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+// Actualiza el stock al comprar y manualmente
+function updateStock(index, action) {
+    const stockInput = document.getElementById(`stock-${index}`);
+    let newStock = parseInt(stockInput.value);
 
-    if (loggedInUser) {
-        const userIndex = users.findIndex(u => u.username === loggedInUser.username);
-        if (userIndex !== -1) {
-            users[userIndex].password = newPassword;
-            saveUsers(); // Guarda los cambios en localStorage
-            alert("Contraseña actualizada con éxito.");
-        } else {
-            alert("Error al actualizar la contraseña.");
-        }
-    } else {
-        alert("Por favor, inicie sesión nuevamente.");
-        redirectToLogin();
+    if (action === 'increase') {
+        newStock += 1;
+    } else if (action === 'decrease' && newStock > 0) {
+        newStock -= 1;
     }
+
+    products[index].stock = newStock;
+    stockInput.value = newStock; // Actualiza el valor del campo de entrada
 }
 
-// Añade producto al carrito
-function addToCart(productName, price) {
+// Muestra todos los productos en la página principal con el stock y precio
+function displayProducts() {
+    const productsContainer = document.querySelector(".products");
+    productsContainer.innerHTML = "";
+
+    products.forEach((product, index) => {
+        const productElement = document.createElement("div");
+        productElement.classList.add("product");
+        productElement.innerHTML = `
+            <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
+            <div class="info">
+                <p class="price${index}">$${product.price}</p>
+                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
+                <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
+            </div>
+        `;
+        productsContainer.appendChild(productElement);
+    });
+}
+
+// Añade producto al carrito y actualiza stock si el usuario no es admin
+function addToCart(index) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
-        cart.push({ name: productName, price: price });
-        totalAmount += price;
-        displayCart();
+        if (products[index].stock > 0) {
+            cart.push({ name: products[index].name, price: products[index].price });
+            totalAmount += products[index].price;
+            products[index].stock -= 1; // Reduce el stock automáticamente después de la compra
+            displayCart();
+            displayAdminStock(); // Actualiza el stock visible para el administrador
+            displayProducts(); // Actualiza la visualización del stock en la página principal
+        } else {
+            alert("Este producto está agotado.");
+        }
     } else if (loggedInUser && loggedInUser.role === 'admin') {
         alert("El carrito de compras solo está disponible para usuarios.");
     } else {
@@ -108,16 +149,6 @@ function displayCart() {
     });
 }
 
-// Función para mostrar y ocultar el carrito
-function toggleCart() {
-    const cartContainer = document.getElementById("cartContainer");
-    if (cartContainer.style.display === "block") {
-        cartContainer.style.display = "none";
-    } else {
-        cartContainer.style.display = "block";
-    }
-}
-
 // Elimina un producto del carrito según su índice
 function removeFromCart(index) {
     totalAmount -= cart[index].price; // Resta el precio del producto eliminado del total
@@ -134,29 +165,11 @@ function checkout() {
     }
 }
 
-// Función para filtrar productos por palabras clave en la descripción
-function searchProducts(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-        const products = document.querySelectorAll(".product");
-
-        products.forEach(product => {
-            const description1 = product.querySelector(".description1")?.textContent.toLowerCase() || "";
-            const description2 = product.querySelector(".description2")?.textContent.toLowerCase() || "";
-            if (description1.includes(searchTerm) || description2.includes(searchTerm)) {
-                product.style.display = "block";
-            } else {
-                product.style.display = "none";
-            }
-        });
-    }
-}
-
 // Ejecuta esta función cuando la página esté cargada
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
     const profileContainer = document.getElementById("profileContainer");
+    const inventoryContainer = document.getElementById("inventoryContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -167,22 +180,15 @@ window.onload = function() {
             location.reload();
         };
         profileContainer.style.display = "block"; // Muestra el botón "Mi perfil" si está logueado
+
+        if (loggedInUser.role === 'admin') {
+            inventoryContainer.style.display = "block"; // Muestra la administración de stock si es admin
+            displayAdminStock(); // Muestra el stock solo para el administrador
+        }
     }
 
-    // Configura los botones de compra para los usuarios
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.onclick = function() {
-            const productContainer = this.parentNode;
-            const productName = productContainer.querySelector('.description1')?.textContent ||
-                                productContainer.querySelector('.description2')?.textContent ||
-                                "Producto desconocido";
-            const priceText = productContainer.querySelector('.price1')?.textContent ||
-                              productContainer.querySelector('.price2')?.textContent ||
-                              "$0";
-            const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
-            addToCart(productName, price);
-        };
-    });
+    // Mostrar productos en la página principal
+    displayProducts();
 };
 
 // Dirige a la página principal
