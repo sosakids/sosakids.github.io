@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - SOSAKIDS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Inventario de Productos</h1>
+        <button onclick="goToHome()" class="styled-button">Inicio</button>
+    </header>
+    
+    <section id="inventorySection" class="inventory-section"></section>
+
+    <script src="script.js"></script>
+    <script>
+        // Muestra el inventario en la página stock.html
+        function displayInventory() {
+            const inventorySection = document.getElementById("inventorySection");
+            inventorySection.innerHTML = ""; // Limpiar la sección de inventario
+
+            products.forEach((product, index) => {
+                const item = document.createElement("div");
+                item.classList.add("inventory-item");
+                item.innerHTML = `
+                    <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
+                    <p>${product.name}</p>
+                    <p>Stock: ${product.stock}</p>
+                `;
+                inventorySection.appendChild(item);
+            });
+        }
+
+        // Llama a displayInventory solo si el usuario es admin
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (loggedInUser && loggedInUser.role === 'admin') {
+            displayInventory();
+        } else {
+            alert("Acceso denegado. Solo el administrador puede ver esta página.");
+            goToHome(); // Redirige a la página principal si no es admin
+        }
+    </script>
+</body>
+</html>
