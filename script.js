@@ -1,11 +1,16 @@
-// Datos simulados de usuarios
-const users = [
+// Cargar usuarios desde localStorage o utilizar datos simulados si no hay usuarios almacenados
+let users = JSON.parse(localStorage.getItem("users")) || [
     { username: 'admin', password: 'adminpass', role: 'admin' },
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
 let cart = [];
 let totalAmount = 0;
+
+// Guarda los usuarios actualizados en localStorage
+function saveUsers() {
+    localStorage.setItem("users", JSON.stringify(users));
+}
 
 // Redirige a la página de login
 function redirectToLogin() {
@@ -32,12 +37,13 @@ function handleLogin(event) {
     }
 }
 
-// Maneja el registro
+// Maneja el registro y guarda el usuario en localStorage
 function handleRegister(event) {
     event.preventDefault();
     const newUsername = document.getElementById("newUsername").value;
     const newPassword = document.getElementById("newPassword").value;
     users.push({ username: newUsername, password: newPassword, role: 'user' });
+    saveUsers();
     alert("Usuario registrado con éxito. Ahora puede iniciar sesión.");
 }
 
@@ -48,10 +54,10 @@ function changePassword(event) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
-        const user = users.find(u => u.username === loggedInUser.username);
-        if (user) {
-            user.password = newPassword;
-            localStorage.setItem("loggedInUser", JSON.stringify(user));
+        const userIndex = users.findIndex(u => u.username === loggedInUser.username);
+        if (userIndex !== -1) {
+            users[userIndex].password = newPassword;
+            saveUsers(); // Guarda los cambios en localStorage
             alert("Contraseña actualizada con éxito.");
         } else {
             alert("Error al actualizar la contraseña.");
@@ -189,4 +195,3 @@ function completePurchase() {
     alert("Gracias por su compra");
     window.location.href = "index.html"; // Redirige a la página principal después del pago
 }
-
