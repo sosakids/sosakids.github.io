@@ -51,35 +51,31 @@ function handleLogin(event) {
     }
 }
 
-// Muestra el stock solo para el administrador
-function displayAdminStock() {
+// Muestra la sección de inventario solo para el administrador
+function displayAdminInventory() {
     const inventoryContainer = document.getElementById("inventoryContainer");
     inventoryContainer.innerHTML = ""; // Limpia el contenedor de inventario
 
     products.forEach((product, index) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-            ${product.name} - Stock: <input type="number" id="stock-${index}" value="${product.stock}" min="0">
-            <button onclick="updateStock(${index}, 'increase')">+</button>
-            <button onclick="updateStock(${index}, 'decrease')">-</button>
+            ${product.name} - Stock: <span id="admin-stock-${index}">${product.stock}</span>
+            <button onclick="modifyStock(${index}, 'increase')">+</button>
+            <button onclick="modifyStock(${index}, 'decrease')">-</button>
         `;
         inventoryContainer.appendChild(listItem);
     });
 }
 
-// Actualiza el stock al comprar y manualmente
-function updateStock(index, action) {
-    const stockInput = document.getElementById(`stock-${index}`);
-    let newStock = parseInt(stockInput.value);
-
+// Modifica el stock manualmente
+function modifyStock(index, action) {
+    const stockDisplay = document.getElementById(`admin-stock-${index}`);
     if (action === 'increase') {
-        newStock += 1;
-    } else if (action === 'decrease' && newStock > 0) {
-        newStock -= 1;
+        products[index].stock += 1;
+    } else if (action === 'decrease' && products[index].stock > 0) {
+        products[index].stock -= 1;
     }
-
-    products[index].stock = newStock;
-    stockInput.value = newStock; // Actualiza el valor del campo de entrada
+    stockDisplay.textContent = products[index].stock; // Actualiza el stock en la sección de inventario
 }
 
 // Muestra todos los productos en la página principal con el stock y precio
@@ -93,8 +89,8 @@ function displayProducts() {
         productElement.innerHTML = `
             <img src="Imagenes/Chaqueta${index + 1}.png" alt="${product.name}">
             <div class="info">
-                <p class="price${index}">$${product.price}</p>
-                <p class="description${index}">${product.name} - Stock: ${product.stock}</p>
+                <p class="price">$${product.price}</p>
+                <p class="description">${product.name}</p>
                 <button class="buy-btn" onclick="addToCart(${index})">Comprar</button>
             </div>
         `;
@@ -102,17 +98,16 @@ function displayProducts() {
     });
 }
 
-// Añade producto al carrito y actualiza stock si el usuario no es admin
+// Añade producto al carrito y actualiza el stock solo en la vista de inventario del admin
 function addToCart(index) {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.role !== 'admin') {
         if (products[index].stock > 0) {
             cart.push({ name: products[index].name, price: products[index].price });
             totalAmount += products[index].price;
-            products[index].stock -= 1; // Reduce el stock automáticamente después de la compra
+            products[index].stock -= 1; // Reduce el stock después de la compra
             displayCart();
-            displayAdminStock(); // Actualiza el stock visible para el administrador
-            displayProducts(); // Actualiza la visualización del stock en la página principal
+            updateAdminInventory(index); // Actualiza el stock en la vista de inventario del admin
         } else {
             alert("Este producto está agotado.");
         }
@@ -121,6 +116,14 @@ function addToCart(index) {
     } else {
         alert("Por favor, inicia sesión para comprar.");
         redirectToLogin();
+    }
+}
+
+// Actualiza el stock en la sección de inventario después de una compra
+function updateAdminInventory(index) {
+    const stockDisplay = document.getElementById(`admin-stock-${index}`);
+    if (stockDisplay) {
+        stockDisplay.textContent = products[index].stock;
     }
 }
 
@@ -183,7 +186,7 @@ window.onload = function() {
 
         if (loggedInUser.role === 'admin') {
             inventoryContainer.style.display = "block"; // Muestra la administración de stock si es admin
-            displayAdminStock(); // Muestra el stock solo para el administrador
+            displayAdminInventory(); // Muestra el inventario solo para el administrador
         }
     }
 
