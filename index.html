@@ -19,10 +19,11 @@
             <h1>SOSAKIDS</h1>
             <h2>La mejor ropa para niños y niñas</h2>
         </div>
+        
         <div class="search-bar">
-            <input type="text" placeholder="Buscar...">
+            <input type="text" id="searchInput" placeholder="Buscar..." onkeypress="searchProducts(event)">
         </div>
-
+        
      <div id="profileContainer" style="display: none;">
         <button id="profileBtn" class="styled-button" onclick="redirectToProfile()">Mi perfil</button>
     </div>
