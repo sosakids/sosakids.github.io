@@ -4,6 +4,20 @@ let users = JSON.parse(localStorage.getItem("users")) || [
     { username: 'user', password: 'userpass', role: 'user' }
 ];
 
+// Lista de productos (chaquetas) con precio y stock inicial
+let products = [
+    { name: 'Chaqueta de Mario Bros', price: 69999, stock: 10 },
+    { name: 'Chaqueta de More Love', price: 69999, stock: 15 },
+    { name: 'Chaqueta de Capitán América', price: 69999, stock: 8 },
+    { name: 'Chaqueta de Pompón', price: 69999, stock: 12 },
+    { name: 'Chaqueta de Cars', price: 69999, stock: 10 },
+    { name: 'Chaqueta de Pompón (estilo 2)', price: 69999, stock: 9 },
+    { name: 'Beisbolera en cuerina', price: 69999, stock: 7 },
+    { name: 'Sudadera de Minnie', price: 69999, stock: 11 },
+    { name: 'Chaqueta de Top Gun', price: 69999, stock: 6 },
+    { name: 'Chaqueta estampada de corazones', price: 69999, stock: 14 }
+];
+
 let cart = [];
 let totalAmount = 0;
 
@@ -20,6 +34,11 @@ function redirectToLogin() {
 // Redirige a la página de perfil
 function redirectToProfile() {
     window.location.href = "profile.html";
+}
+
+// Redirige a la página de stock
+function redirectToStock() {
+    window.location.href = "stock.html";
 }
 
 // Maneja el inicio de sesión
@@ -157,6 +176,7 @@ function searchProducts(event) {
 window.onload = function() {
     const loginBtn = document.getElementById("loginBtn");
     const profileContainer = document.getElementById("profileContainer");
+    const stockBtnContainer = document.getElementById("stockBtnContainer");
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
     if (loggedInUser) {
@@ -173,27 +193,8 @@ window.onload = function() {
         }
     }
 
+    // Mostrar productos en la página principal
     displayProducts();
-};
-
-function redirectToStock() {
-    window.location.href = "stock.html";
-}
-    
-    // Configura los botones de compra para los usuarios
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.onclick = function() {
-            const productContainer = this.parentNode;
-            const productName = productContainer.querySelector('.description1')?.textContent ||
-                                productContainer.querySelector('.description2')?.textContent ||
-                                "Producto desconocido";
-            const priceText = productContainer.querySelector('.price1')?.textContent ||
-                              productContainer.querySelector('.price2')?.textContent ||
-                              "$0";
-            const price = parseInt(priceText.replace('$', '').replace('.', '')) || 0;
-            addToCart(productName, price);
-        };
-    });
 };
 
 // Dirige a la página principal
@@ -206,5 +207,3 @@ function completePurchase() {
     alert("Gracias por su compra");
     window.location.href = "index.html"; // Redirige a la página principal después del pago
 }
-
-
