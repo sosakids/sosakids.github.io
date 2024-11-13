@@ -621,3 +621,34 @@ footer {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra más ligera */
 }
 
+/* STOCK */
+
+/* Estilos para la sección de inventario */
+.inventory-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.inventory-item {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.inventory-item img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+}
+
+.inventory-item p {
+    font-size: 1em;
+    color: #333;
+    margin: 10px 0;
+}
