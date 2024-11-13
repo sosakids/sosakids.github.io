@@ -595,3 +595,29 @@ footer {
 }
 
 
+/* Estilo para los botones de Comprar */
+.buy-btn {
+    background-color: #6a5acd; /* Color de fondo lavanda */
+    color: #fff; /* Color de texto blanco */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Cambia el color de fondo y escala al pasar el mouse */
+.buy-btn:hover {
+    background-color: #5a4abe; /* Color más oscuro en hover */
+    transform: scale(1.05); /* Agranda ligeramente el botón */
+}
+
+/* Efecto de clic */
+.buy-btn:active {
+    transform: scale(0.98); /* Reduce ligeramente el botón en clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra más ligera */
+}
+
