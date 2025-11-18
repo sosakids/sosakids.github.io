@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen de Inventario</title>
+</head>
+<body>
+    <h1>Resumen del Inventario</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Cantidad Total</th><th>Cantidad por Tallas</th>
+        </tr>
+        {% for r in resumen %}
+        <tr>
+            <td>{{ r.id_producto }}</td>
+            <td>{{ r.nombre }}</td>
+            <td>{{ r.total }}</td>
+            <td>{{ r.cantidad_por_talla }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Volver</a>
+</body>
+</html>

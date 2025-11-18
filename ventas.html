@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas Registradas</title>
+    <style>
+        body {
+            background-color: #fde6f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #f3d3f7;
+            padding: 10px 20px;
+            text-align: center;
+            border-bottom: 2px solid #c27ed8;
+        }
+
+        header h1 {
+            color: #822fa5;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .acciones {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .acciones a button {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .acciones a button.borrar {
+            background-color: #c0392b;
+        }
+
+        .acciones a button:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 90%;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #d195d7;
+        }
+
+        th {
+            background-color: #eecafa;
+            color: #5c2e83;
+            padding: 10px;
+        }
+
+        td {
+            text-align: center;
+            padding: 8px;
+        }
+
+        a.volver {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #6a1b9a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a.volver:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ventas Registradas</h1>
+    </header>
+
+    <div class="acciones">
+        <a href="/descargar_ventas"><button>📥 Descargar Excel</button></a>
+        <a href="/vaciar_ventas" onclick="return confirm('¿Estás seguro de borrar todas las ventas?');">
+            <button class="borrar">🗑 Vaciar Ventas</button>
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID Venta</th>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Talla</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in ventas %}
+            <tr>
+                <td>{{ v.id_venta }}</td>
+                <td>{{ v.fecha_venta }}</td>
+                <td>{{ v.producto }}</td>
+                <td>{{ v.talla }}</td>
+                <td>{{ v.cantidad_vendida }}</td>
+                <td>${{ "%.2f"|format(v.valor_unitario) }}</td>
+                <td>${{ "%.2f"|format(v.valor_unitario * v.cantidad_vendida) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" class="volver">← Volver al inicio</a>
+
+</body>
+</html>

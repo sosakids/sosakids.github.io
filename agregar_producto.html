@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Producto</title>
+    <style>
+        body {
+            background-color: #fde6f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #f3d3f7;
+            padding: 10px 20px;
+            text-align: center;
+            border-bottom: 2px solid #c27ed8;
+        }
+
+        header h1 {
+            color: #822fa5;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            width: 70%;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        label {
+            display: inline-block;
+            width: 180px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #5c2e83;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #6a1b9a;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        strong {
+            color: #6a1b9a;
+        }
+
+        .radios {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Agregar Producto</h1>
+    </header>
+
+    <form method="POST">
+        <div class="radios">
+            <label><input type="radio" name="opcion" value="nuevo" checked onclick="toggleForms()"> Nuevo producto</label>
+            <label><input type="radio" name="opcion" value="existente" onclick="toggleForms()"> Actualizar existente</label>
+        </div>
+
+        <!-- Formulario NUEVO producto -->
+        <div id="form_nuevo">
+            <label>Nombre:</label><input type="text" name="nombre"><br>
+            <label>Color:</label><input type="text" name="color"><br>
+            <label>Tipo:</label>
+            <select name="tipo">
+                <option value="Solo chaqueta">Solo chaqueta</option>
+                <option value="Conjunto completo">Conjunto completo</option>
+            </select><br>
+            <label>Cantidad total:</label><input type="number" name="cantidad"><br>
+            <label>Precio unitario:</label><input type="number" step="0.01" name="precio_unitario"><br>
+        </div>
+
+        <!-- Formulario ACTUALIZAR producto -->
+        <div id="form_existente" style="display:none;">
+            <label>Producto existente:</label>
+            <select name="producto_existente">
+                {% for p in productos %}
+                <option value="{{ p.id_producto }}">{{ p.nombre }}</option>
+                {% endfor %}
+            </select><br>
+        </div>
+
+        <br>
+        <strong>Especificar cantidades por talla:</strong><br><br>
+        {% for talla in range(2, 15, 2) %}
+            <label>Talla {{ talla }}:</label> <input type="number" name="talla_{{ talla }}" min="0"><br>
+        {% endfor %}
+
+        <input type="submit" value="Agregar">
+    </form>
+
+    <a href="/">← Volver al inicio</a>
+
+    <script>
+        function toggleForms() {
+            const nuevo = document.querySelector('input[value="nuevo"]').checked;
+            document.getElementById('form_nuevo').style.display = nuevo ? 'block' : 'none';
+            document.getElementById('form_existente').style.display = nuevo ? 'none' : 'block';
+        }
+    </script>
+
+</body>
+</html>
