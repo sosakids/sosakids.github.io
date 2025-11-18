@@ -1,195 +1,220 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOSAKIDS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Inventario de Chaquetas - SOSAKIDS</title>
+    <style>
+        body {
+            background-color: #fde6f2; /* Rosa pastel */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #f3d3f7;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #c27ed8;
+        }
+
+        header h1 {
+            color: #822fa5; /* Morado */
+            margin: 0 auto;
+            font-size: 32px;
+        }
+
+        header img {
+            height: 80px;
+        }
+
+        .nav-buttons {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-buttons a button {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-buttons a button:hover {
+            background-color: #732d91;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 90%;
+            background-color: white;
+        }
+
+        table, th, td {
+            border: 1px solid #d195d7;
+        }
+
+        th {
+            background-color: #eecafa;
+            color: #5c2e83;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        td button {
+            background-color: #9b59b6;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        td button:hover {
+            background-color: #884ea0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c2c2c;
+            color: white;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        footer div {
+            margin: 10px;
+        }
+
+        footer h3 {
+            color: #b19cd9; /* Morado claro */
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: #b19cd9;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-logo img {
+            height: 80px;
+        }
+
+        .social-icons img,
+        .payment-icons img {
+            height: 35px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #bbb;
+        }
+    </style>
 </head>
 <body>
+
     <header>
-        <div class="home-button-container">
-            <button id="homeBtn" class="styled-button" onclick="goToHome()">Inicio</button>
-        </div>
-        <div class="logo">
-            <img src="Imagenes/Logo1.png" alt="Logo SOSAKIDS">
-        </div>
-
-        <div id="stockBtnContainer" style="display: none;">
-           <button onclick="redirectToStock()" class="styled-button">Stock</button>
-       </div>
-
-        <div class="header-text">
-            <h1>SOSAKIDS</h1>
-            <h2>La mejor ropa para niños y niñas</h2>
-        </div>
-        
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar..." onkeypress="searchProducts(event)">
-        </div>
-        
-     <div id="profileContainer" style="display: none;">
-        <button id="profileBtn" class="styled-button" onclick="redirectToProfile()">Mi perfil</button>
-    </div>
-        
-     <div class="login-container">
-         <button id="loginBtn" class="styled-button" onclick="redirectToLogin()">Iniciar sesión</button>
-     </div>
-        
-    </div>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SOSAKIDS">
+        <h1>SOSAKIDS - Inventario de Chaquetas</h1>
+        <div style="width: 60px;"></div>
     </header>
 
-    <div id="cartContainer" class="cart-container">
-        <button id="closeCartBtn" class="close-cart-button" onclick="toggleCart()">X</button>
-        <h3>Carrito de Compras</h3>
-        <ul id="cartItems" class="cart-items"></ul>
-        <p id="total">Total: $0</p>
-        <button id="checkoutBtn" onclick="checkout()" class="checkout-button">Realizar Pedido</button>
+    <div class="nav-buttons">
+        <a href="/agregar"><button>Agregar Producto</button></a>
+        <a href="/registrar_venta"><button>Registrar Venta</button></a>
+        <a href="/ventas"><button>Ver Ventas</button></a>
     </div>
 
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Color</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Tallas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.id_producto }}</td>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.color }}</td>
+                <td>{{ producto.tipo }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>${{ "%.2f"|format(producto.precio_unitario) }}</td>
+                <td><a href="/tallas/{{ producto.id_producto }}"><button>Ver Tallas</button></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    
-    <section class="products">
-        <div class="product">
-            <img src="Imagenes/Chaqueta1.png" alt="Sudadera 1">
-            <div class="info">
-                <p class="price1">$69.999</p>
-                <p class="description1">Sudadera de Mario Bros, en tela supernailon, tres piezas, bordada en hilo y estampada.</p>
-                <p class="sizes1">Tallas disponibles: 2-12.</p>
-                <p class="stock-info" style="display: none;">Stock disponible: <span id="stock1">50</span> unidades</p>
-                <button class="buy-btn" onclick="addToCart('Sudadera de Mario Bros', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta2.png" alt="Chaqueta 1">
-            <div class="info">
-                <p class="price2">$69.999</p>
-                <p class="description2">Chaqueta de More Love enguatada, peluche en la capota , bordada en hilo con aplique brillante.</p>
-                <p class="sizes2">Tallas disponibles: 2-14.</p>
-                <button class="buy-btn" onclick="showLoginForm()">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta3.png" alt="Chaqueta 2">
-            <div class="info">
-                <p class="price1">$69.999</p>
-                <p class="description1">Chaqueta de Capitan America en tela nailon, acolchada , bordado en hilo y en la espalda, con cremallera en la capota</p>
-                <p class="sizes1">Tallas disponibles:2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta de Capitan America en tela nailon', 69999)">Comprar</button>
-            </div>
-        </div>
-
-        <div class="product">
-            <img src="Imagenes/Chaqueta4.png" alt="Chaqueta 5">
-            <div class="info">
-                <p class="price2">$69.999</p>
-                <p class="description2">Chaqueta de pompom, con bordado en relieve de piel de conejo, en tela nailon y tiene resorter en la cintura</p>
-                <p class="sizes2">Tallas disponibles: 2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta de pompom', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta5.png" alt="Chaqueta 3">
-            <div class="info">
-                <p class="price1">$69.999</p>
-                <p class="description1">Chaqueta de Cars con cordon en la capota, bordado en hilo con aplique y bolsillos con cremalleras </p>
-                <p class="sizes1">Tallas disponibles: 2 - 14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta de Cars', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta6.png" alt="Chaqueta 4">
-            <div class="info">
-                <p class="price2">$69.999</p>
-                <p class="description2">Chaqueta de pompon, con bordado en relieve de piel de conejo, en tela nailon y tiene resorter en la cintura</p>
-                <p class="sizes2">Tallas disponibles: 2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta de pompon', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta7.png" alt="Chaqueta 6">
-            <div class="info">
-                <p class="price1">$69.999</p>
-                <p class="description1">Beisbolera en cuerina, trae botones para abrochar y bordado con aplique</p>
-                <p class="sizes1">Tallas disponibles:2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Beisbolera en cuerina', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta8.png" alt="Sudadera 2">
-            <div class="info">
-                <p class="price2">$69.999</p>
-                <p class="description2">Sudadera de minnie forrda, en tela nautica, bordada en hilo y estampada, tres piezas.</p>
-                <p class="sizes2">Tallas disponibles: 2-12.</p>
-                <button class="buy-btn" onclick="addToCart('Sudadera de minnie forrda', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta9.png" alt="Chaqueta 8">
-            <div class="info">
-                <p class="price1">$69.999</p>
-                <p class="description1">Chaqueta de Top Gun forrada en ovejero, bordado en hilo. </p>
-                <p class="sizes1">Tallas disponibles: 2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta de Top Gun forrada en ovejero', 69999)">Comprar</button>
-            </div>
-        </div>
-        <div class="product">
-            <img src="Imagenes/Chaqueta10.png" alt="Chaqueta 7">
-            <div class="info">
-                <p class="price2">$69.999</p>
-                <p class="description2">Chaqueta estampada de corazones, forrada en ovejero.</p>
-                <p class="sizes2">Tallas disponibles: 2-14.</p>
-                <button class="buy-btn" onclick="addToCart('Chaqueta estampada de corazones', 69999)">Comprar</button>
-            </div>
-        </div>
-    </section>
-
-    
-    <!-- PIE DE PAGINA -->
+    <!-- Footer -->
     <footer>
-        <div class="footer-container">
-            
-            <div class="footer-section logo-section">
-                <img src="Imagenes/Logo1.png" alt="Logo SOSAKIDS">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SOSAKIDS">
+        </div>
+
+        <div>
+            <h3>SOSAKIDS</h3>
+            <p>Ubicación: Calle 10 #11 - 54<br>
+               Segundo piso<br>
+               Local 23</p>
+        </div>
+
+        <div>
+            <h3>ATENCIÓN AL CLIENTE</h3>
+            <p>WhatsApp: 3160492312<br>
+               Correo: <a href="mailto:sosakidsmoda@gmail.com">sosakidsmoda@gmail.com</a><br>
+               <a href="#">Política de Datos</a></p>
+        </div>
+
+        <div>
+            <h3>SÍGUENOS EN:</h3>
+            <div class="social-icons">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+                <img src="{{ url_for('static', filename='img/youtube.png') }}" alt="YouTube">
+                <img src="{{ url_for('static', filename='img/instagram.png') }}" alt="Instagram">
             </div>
-            <div class="footer-section">
-                <h4>SOSAKIDS</h4>
-                <ul>
-                    <li><a href="#">Ubicación: Calle 10 #11 - 54</a></li>
-                    <li><a href="#">Segundo piso</a></li>
-                    <li><a href="#">Local 23</a></li>
-                </ul>
+            <h3>Haz tus compras con estos Medios de Pago</h3>
+            <div class="payment-icons">
+                <img src="{{ url_for('static', filename='img/nequi.jpg') }}" alt="Nequi">
+                <img src="{{ url_for('static', filename='img/daviplata.png') }}" alt="Daviplata">
             </div>
-            <div class="footer-section">
-                <h4>ATENCIÓN AL CLIENTE</h4>
-                <ul>
-                    <li><a href="#">WhatsApp: 3160492312</a></li>
-                    <li><a href="#">Correo: sosakidsmoda@gmail.com</a></li>
-                    <li><a href="#">Política de Datos</a></li>
-                </ul>
-            </div>
-            <div class="social-media">
-                <h4>SÍGUENOS EN:</h4>
-                <ul>
-                    <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                </ul>
-            </div>
-            <div class="footer-section payment-methods">
-                <h4>Haz tus compras con estos Medios de Pago</h4>
-                <ul>
-                    <li><img src="Imagenes/Nequi.jpg" alt="Nequi"></li>
-                    <li><img src="Imagenes/Daviplata.jpg" alt="Daviplata"></li>
-                </ul>
-            </div>
-            <!-- Copyright -->
-            <div class="footer-bottom">
-                <p>&copy; 2024 SOSAKIDS | Todos los derechos reservados.</p>
-            </div>
+        </div>
+
+        <div class="copyright">
+            © 2025 SOSAKIDS | Todos los derechos reservados.
         </div>
     </footer>
-    <script src="script.js"></script>
+
 </body>
 </html>
